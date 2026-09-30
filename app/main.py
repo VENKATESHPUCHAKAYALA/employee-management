@@ -25,8 +25,18 @@ def get_db():
         db.close()
 
 
-@app.get("/api/employees", response_model=list[EmployeeResponse])
+@app.get("/")
+def home():
+    return {"message": "Employee Management API is running"}
+
+
+@app.get("/employees", response_model=list[EmployeeResponse])
 def get_employees(db: Session = Depends(get_db)):
+    return db.query(Employee).all()
+
+
+@app.get("/api/employees", response_model=list[EmployeeResponse])
+def get_employees_api(db: Session = Depends(get_db)):
     return db.query(Employee).all()
 
 
@@ -94,4 +104,3 @@ app.mount(
     StaticFiles(directory=FRONTEND_DIR, html=True),
     name="frontend",
 )
-
